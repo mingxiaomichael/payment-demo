@@ -1,0 +1,22 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: payment-demo-mysql
+    environment:
+      MYSQL_DATABASE: payment_demo
+      MYSQL_USER: payment_user
+      MYSQL_PASSWORD: payment_pass
+      MYSQL_ROOT_PASSWORD: root_pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - payment_demo_mysql_data:/var/lib/mysql
+      - ./docker/mysql/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u payment_user -ppayment_pass --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  payment_demo_mysql_data:

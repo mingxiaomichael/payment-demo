@@ -5,6 +5,51 @@ The following was discovered as part of building this project:
 
 # Getting Started
 
+## Domain Schema
+
+The project now contains 3 core tables/entities for payment processing:
+
+- `accounts`: account master data and balance
+- `payments`: payment request records, including payment method and status
+- `payment_transactions`: immutable transaction history rows linked to payments and accounts
+
+### Relationship model
+
+- One `account` has many `payments`
+- One `account` has many `payment_transactions`
+- One `payment` has many `payment_transactions`
+
+Schema SQL is located at:
+
+- `docker/postgres/init/01_schema.sql`
+
+JPA entities are located at:
+
+- `src/main/java/com/example/payment_demo/entity/Account.java`
+- `src/main/java/com/example/payment_demo/entity/Payment.java`
+- `src/main/java/com/example/payment_demo/entity/PaymentTransaction.java`
+
+## Run PostgreSQL with Docker
+
+Start DB:
+
+```bash
+docker compose up -d postgres
+```
+
+Stop DB:
+
+```bash
+docker compose down
+```
+
+The default DB settings match `src/main/resources/application.properties`:
+
+- DB name: `payment_demo`
+- username: `payment_user`
+- password: `payment_pass`
+- URL: `jdbc:postgresql://localhost:5432/payment_demo`
+
 ### Reference Documentation
 For further reference, please consider the following sections:
 
@@ -28,4 +73,3 @@ Due to Maven's design, elements are inherited from the parent POM to the project
 While most of the inheritance is fine, it also inherits unwanted elements like `<license>` and `<developers>` from the parent.
 To prevent this, the project POM contains empty overrides for these elements.
 If you manually switch to a different parent and actually want the inheritance, you need to remove those overrides.
-
